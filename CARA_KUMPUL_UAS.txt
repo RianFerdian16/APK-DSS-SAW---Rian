@@ -1,0 +1,22 @@
+CARA KUMPUL UAS DSS/SPK
+=======================
+
+Yang dikumpulkan biasanya:
+1. Link aplikasi Railway yang sudah online.
+2. Link GitHub repository berisi source code.
+3. Screenshot halaman aplikasi ketika hasil SAW sudah muncul.
+4. File zip project ini jika dosen minta source code.
+
+Langkah singkat:
+1. Buat project Supabase.
+2. Jalankan SQL dari supabase/schema.sql.
+3. Upload project ini ke GitHub.
+4. Deploy repository GitHub ke Railway.
+5. Isi Railway Variables:
+   - SUPABASE_URL
+   - SUPABASE_ANON_KEY
+6. Buka domain Railway.
+7. Klik Hitung Ranking SAW.
+8. Pastikan histori muncul di bagian bawah aplikasi.
+9. Screenshot hasilnya.
+10. Kumpulkan link Railway + link GitHub + screenshot.
