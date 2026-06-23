@@ -10,11 +10,12 @@ except Exception:
     pass
 
 from modules.saw import hitung_saw
+from modules.topsis import hitung_topsis
 from modules.supabase_handler import ambil_history, is_connected, simpan_history
 from modules.visualizer import grafik_bobot, grafik_ranking
 
 st.set_page_config(
-    page_title="DSS/SPK SAW - Nicholas Liswady",
+    page_title="Aplikasi Sistem Pendukung Keputusan",
     page_icon="📊",
     layout="wide",
 )
@@ -22,6 +23,10 @@ st.set_page_config(
 DEFAULT_CRITERIA = ["Harga", "Kualitas", "Ketepatan"]
 DEFAULT_TYPES = ["cost", "benefit", "benefit"]
 DEFAULT_WEIGHTS = [40, 35, 25]
+METHOD_OPTIONS = {
+    "SAW": "SAW (Simple Additive Weighting)",
+    "TOPSIS": "TOPSIS (Technique for Order Preference by Similarity to Ideal Solution)",
+}
 
 
 @st.cache_data
@@ -57,6 +62,28 @@ def normalize_weight_percentages(weights: list[int]) -> list[float]:
     return [round(weight / total, 4) for weight in weights]
 
 
+def get_method_explanation(method: str) -> str:
+    if method == "TOPSIS":
+        return """
+        **TOPSIS** bekerja dengan cara:
+        1. Menentukan alternatif dan kriteria.
+        2. Melakukan normalisasi matriks keputusan.
+        3. Mengalikan nilai normalisasi dengan bobot.
+        4. Menentukan solusi ideal positif dan negatif.
+        5. Menghitung jarak setiap alternatif dari solusi ideal.
+        6. Menentukan ranking berdasarkan nilai preferensi terbesar.
+        """
+
+    return """
+    **SAW (Simple Additive Weighting)** bekerja dengan cara:
+    1. Menentukan alternatif dan kriteria.
+    2. Menentukan tipe kriteria: cost atau benefit.
+    3. Melakukan normalisasi nilai.
+    4. Mengalikan nilai normalisasi dengan bobot.
+    5. Menentukan ranking berdasarkan skor terbesar.
+    """
+
+
 st.markdown(
     """
     <style>
@@ -80,15 +107,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<div class="main-title">Sistem Pendukung Keputusan Metode SAW</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">Aplikasi Sistem Pendukung Keputusan</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="subtitle">Aplikasi UAS Aplikasi Pendukung Keputusan untuk menentukan alternatif terbaik berdasarkan bobot kriteria.</div>',
+    '<div class="subtitle">Aplikasi Pendukung Keputusan untuk menentukan alternatif terbaik berdasarkan bobot kriteria.</div>',
     unsafe_allow_html=True,
 )
 
 with st.sidebar:
     st.header("Pengaturan DSS")
     dataset_name = st.text_input("Nama kasus/dataset", value="Pemilihan Supplier Terbaik")
+
+    st.subheader("Metode Perhitungan")
+    selected_method_label = st.selectbox(
+        "Pilih metode",
+        options=list(METHOD_OPTIONS.values()),
+        index=0,
+    )
+    selected_method = next(key for key, value in METHOD_OPTIONS.items() if value == selected_method_label)
 
     st.subheader("Bobot Kriteria")
     harga_weight = st.slider("Harga / Biaya", 0, 100, DEFAULT_WEIGHTS[0])
@@ -132,16 +167,7 @@ with left:
 
 with right:
     st.subheader("Ringkasan Metode")
-    st.markdown(
-        """
-        **SAW (Simple Additive Weighting)** bekerja dengan cara:
-        1. Menentukan alternatif dan kriteria.
-        2. Menentukan tipe kriteria: cost atau benefit.
-        3. Melakukan normalisasi nilai.
-        4. Mengalikan nilai normalisasi dengan bobot.
-        5. Menentukan ranking berdasarkan skor terbesar.
-        """
-    )
+    st.markdown(get_method_explanation(selected_method))
     bobot_df = pd.DataFrame(
         {
             "Kriteria": DEFAULT_CRITERIA,
@@ -157,15 +183,24 @@ if is_valid:
 else:
     st.error(message)
 
-calculate = st.button("Hitung Ranking SAW", type="primary", use_container_width=True, disabled=not is_valid)
+calculate = st.button(
+    f"Hitung Ranking {selected_method}",
+    type="primary",
+    use_container_width=True,
+    disabled=not is_valid,
+)
 
 if calculate:
     try:
-        hasil, normalisasi = hitung_saw(edited_data, DEFAULT_CRITERIA, normalized_weights, DEFAULT_TYPES)
+        if selected_method == "TOPSIS":
+            hasil, normalisasi = hitung_topsis(edited_data, DEFAULT_CRITERIA, normalized_weights, DEFAULT_TYPES)
+        else:
+            hasil, normalisasi = hitung_saw(edited_data, DEFAULT_CRITERIA, normalized_weights, DEFAULT_TYPES)
+
         best = hasil.iloc[0]
 
         st.divider()
-        st.subheader("Hasil Rekomendasi")
+        st.subheader(f"Hasil Rekomendasi Metode {selected_method}")
 
         c1, c2, c3 = st.columns(3)
         c1.metric("Alternatif Terbaik", best["Alternatif"])
@@ -180,7 +215,7 @@ if calculate:
         with weight_col:
             st.plotly_chart(grafik_bobot(DEFAULT_CRITERIA, normalized_weights), use_container_width=True)
 
-        with st.expander("Lihat hasil normalisasi matriks SAW"):
+        with st.expander(f"Lihat matriks normalisasi {selected_method}"):
             normalisasi_display = pd.concat([edited_data[["Alternatif"]].reset_index(drop=True), normalisasi], axis=1)
             st.dataframe(normalisasi_display, use_container_width=True, hide_index=True)
 
@@ -188,12 +223,19 @@ if calculate:
         st.download_button(
             "Download hasil ranking CSV",
             data=csv_result,
-            file_name="hasil_ranking_saw.csv",
+            file_name=f"hasil_ranking_{selected_method.lower()}.csv",
             mime="text/csv",
             use_container_width=True,
         )
 
-        saved, save_message = simpan_history(dataset_name, DEFAULT_CRITERIA, DEFAULT_TYPES, normalized_weights, hasil)
+        saved, save_message = simpan_history(
+            dataset_name,
+            DEFAULT_CRITERIA,
+            DEFAULT_TYPES,
+            normalized_weights,
+            hasil,
+            selected_method,
+        )
         if saved:
             st.success(save_message)
         else:
@@ -214,4 +256,4 @@ else:
         history["created_at"] = pd.to_datetime(history["created_at"]).dt.strftime("%d %b %Y %H:%M")
     st.dataframe(history, use_container_width=True, hide_index=True)
 
-st.caption("Dibuat oleh Nicholas Liswady | UAS Aplikasi Pendukung Keputusan")
+st.caption("Dibuat oleh Rian Ferdiansyah | Aplikasi Sistem Pendukung Keputusan")

@@ -37,6 +37,7 @@ def simpan_history(
     tipe: list[str],
     bobot: list[float],
     hasil: pd.DataFrame,
+    metode: str = "SAW",
 ) -> tuple[bool, str]:
     """Menyimpan hasil perhitungan ke tabel Supabase."""
     client = get_supabase_client()
@@ -45,7 +46,7 @@ def simpan_history(
 
     best_row = hasil.iloc[0].to_dict()
     payload: dict[str, Any] = {
-        "metode": "SAW",
+        "metode": metode,
         "dataset_name": dataset_name,
         "criteria": {"kriteria": kriteria, "tipe": tipe},
         "weights": {kriteria[i]: float(bobot[i]) for i in range(len(kriteria))},

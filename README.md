@@ -1,7 +1,7 @@
-# DSS/SPK Metode SAW - Streamlit + Supabase + Railway
+# Aplikasi Sistem Pendukung Keputusan - Streamlit + Supabase + Railway
 
 Aplikasi ini dibuat untuk tugas UAS mata kuliah Aplikasi Pendukung Keputusan.
-Fungsi utama aplikasi adalah menentukan alternatif terbaik dengan metode SAW (Simple Additive Weighting).
+Fungsi utama aplikasi adalah menentukan alternatif terbaik berdasarkan bobot kriteria. Aplikasi menyediakan pilihan metode SAW dan TOPSIS.
 
 ## Fitur
 
@@ -9,7 +9,8 @@ Fungsi utama aplikasi adalah menentukan alternatif terbaik dengan metode SAW (Si
 - Edit data langsung dari tabel aplikasi.
 - Pengaturan bobot kriteria dengan slider.
 - Normalisasi otomatis bobot kriteria.
-- Perhitungan ranking metode SAW.
+- Pilihan metode perhitungan SAW dan TOPSIS.
+- Perhitungan ranking alternatif otomatis.
 - Visualisasi grafik ranking dan komposisi bobot.
 - Download hasil ranking dalam CSV.
 - Simpan histori hasil perhitungan ke Supabase.
