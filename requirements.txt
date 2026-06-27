@@ -4,3 +4,4 @@ numpy>=1.26,<3
 plotly>=5.20,<7
 supabase>=2.8,<3
 python-dotenv>=1.0,<2
+pytest>=8.0,<9

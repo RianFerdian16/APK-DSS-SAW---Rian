@@ -4,14 +4,14 @@ import pandas as pd
 import plotly.express as px
 
 
-def grafik_ranking(hasil: pd.DataFrame):
+def grafik_ranking(hasil: pd.DataFrame, metode: str = "SAW"):
     fig = px.bar(
         hasil.sort_values("Skor", ascending=True),
         x="Skor",
         y="Alternatif",
         orientation="h",
         text="Skor",
-        title="Grafik Skor Preferensi SAW",
+        title=f"Grafik Skor Preferensi {metode}",
     )
     fig.update_traces(texttemplate="%{text:.4f}", textposition="outside")
     fig.update_layout(

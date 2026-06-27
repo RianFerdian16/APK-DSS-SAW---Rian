@@ -18,6 +18,9 @@ def hitung_topsis(
     if len(kriteria) != len(bobot) or len(kriteria) != len(tipe):
         raise ValueError("Jumlah kriteria, bobot, dan tipe kriteria harus sama.")
 
+    if any(jenis not in {"benefit", "cost"} for jenis in tipe):
+        raise ValueError("Tipe kriteria hanya boleh 'benefit' atau 'cost'.")
+
     total_bobot = sum(bobot)
     if total_bobot <= 0:
         raise ValueError("Total bobot harus lebih dari 0.")
@@ -44,7 +47,13 @@ def hitung_topsis(
 
     jarak_positif = np.sqrt(((terbobot - ideal_positif) ** 2).sum(axis=1))
     jarak_negatif = np.sqrt(((terbobot - ideal_negatif) ** 2).sum(axis=1))
-    preferensi = jarak_negatif / (jarak_positif + jarak_negatif)
+    denominator = jarak_positif + jarak_negatif
+    preferensi = np.divide(
+        jarak_negatif,
+        denominator,
+        out=np.ones_like(denominator, dtype=float),
+        where=denominator != 0,
+    )
 
     hasil = df.copy()
     hasil["Jarak Ideal +"] = jarak_positif.round(4)
