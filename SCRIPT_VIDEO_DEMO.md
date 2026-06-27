@@ -1,64 +1,37 @@
-# Script Video Demo 3-5 Menit
+# Script Video Demo UAS DSS
 
-Gunakan file ini sebagai panduan rekaman layar untuk deliverable UAS.
+Durasi target: 3-5 menit.
 
-## 0:00 - 0:30 Pembukaan
+1. Perkenalan singkat:
+   - Nama aplikasi: UAS APK Rian - DSS Pemilihan Laptop Terbaik.
+   - Metode: SAW/TOPSIS.
+   - Tujuan: membantu memilih laptop terbaik untuk mahasiswa.
 
-Perkenalkan aplikasi:
+2. Tunjukkan dataset:
+   - Alternatif: Asus Vivobook 14, Lenovo IdeaPad Slim 3, Acer Aspire 5, HP Pavilion 14, MSI Modern 14.
+   - Kriteria: Harga, Performa, Baterai, Portabilitas.
 
-> Aplikasi ini adalah Sistem Pendukung Keputusan untuk memilih supplier terbaik menggunakan metode SAW dan TOPSIS.
+3. Jelaskan tipe kriteria:
+   - Harga = cost.
+   - Performa, Baterai, Portabilitas = benefit.
 
-Sebutkan domain masalah:
+4. Demo fitur:
+   - Upload/edit data.
+   - Ubah bobot.
+   - Ubah tipe kriteria.
+   - Pilih metode SAW/TOPSIS.
+   - Klik hitung ranking.
 
-> Alternatifnya adalah 5 supplier. Kriterianya adalah Harga, Kualitas, Ketepatan, dan Kapasitas.
+5. Tunjukkan output:
+   - Ranking terbaik.
+   - Grafik ranking.
+   - Grafik bobot.
+   - Download hasil ranking.
 
-## 0:30 - 1:15 Tunjukkan Dataset dan Input
+6. Tunjukkan testing:
+   - Buka terminal.
+   - Jalankan pytest.
+   - Tunjukkan hasil 3 passed.
 
-Tunjukkan tabel data alternatif di aplikasi.
-
-Jelaskan:
-
-- Harga bertipe cost karena semakin murah semakin baik.
-- Kualitas, Ketepatan, dan Kapasitas bertipe benefit karena semakin tinggi semakin baik.
-
-## 1:15 - 2:00 Tunjukkan Bobot dan What-if
-
-Ubah slider bobot, misalnya:
-
-- Harga dari 30 ke 40.
-- Kapasitas dari 15 ke 10.
-
-Jelaskan:
-
-> Ini adalah fitur what-if. Ketika bobot diubah, hasil ranking bisa dihitung ulang tanpa mengubah kode program.
-
-## 2:00 - 3:00 Hitung Ranking SAW
-
-Pilih metode SAW, klik tombol Hitung Ranking SAW.
-
-Tunjukkan:
-
-- Alternatif terbaik.
-- Skor tertinggi.
-- Tabel ranking.
-- Grafik ranking.
-- Grafik komposisi bobot.
-- Matriks normalisasi.
-
-## 3:00 - 4:00 Hitung Ranking TOPSIS
-
-Pilih metode TOPSIS, klik Hitung Ranking TOPSIS.
-
-Tunjukkan:
-
-- Tabel ranking TOPSIS.
-- Jarak ideal positif dan negatif.
-- Skor preferensi.
-
-## 4:00 - 4:30 Testing dan Penutup
-
-Tunjukkan folder `tests` atau jalankan `pytest`.
-
-Tutup dengan:
-
-> Kesimpulannya, aplikasi sudah memenuhi fitur DSS: input data, normalisasi, perhitungan skor, ranking, visualisasi, what-if bobot, dan testing edge case.
+7. Penutup:
+   - Jelaskan bahwa aplikasi memenuhi minimal 5 alternatif, 4 kriteria, visualisasi, what-if, testing, dan deploy Railway.

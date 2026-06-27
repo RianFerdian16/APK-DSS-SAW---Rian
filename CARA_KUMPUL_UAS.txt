@@ -1,35 +1,30 @@
-CARA KUMPUL UAS DSS/SPK
-=======================
+CARA KUMPUL UAS
 
-Isi zip ini sudah dirapikan untuk checklist UAS:
-1. Source code aplikasi Streamlit.
-2. Dataset CSV minimal 5 alternatif dan 4 kriteria.
-3. Modul SAW, TOPSIS, visualizer, dan Supabase handler.
-4. Unit test/edge case di folder tests.
-5. Laporan PDF di folder laporan.
-6. Panduan script video demo di SCRIPT_VIDEO_DEMO.md.
+1. Pastikan aplikasi sudah memakai studi kasus laptop:
+   - Harga = cost
+   - Performa = benefit
+   - Baterai = benefit
+   - Portabilitas = benefit
 
-Cara run lokal:
-1. Buka terminal di folder dss_railway_supabase.
-2. Jalankan: pip install -r requirements.txt
-3. Jalankan: streamlit run app.py
-4. Klik Hitung Ranking SAW/TOPSIS.
+2. Jalankan aplikasi lokal:
+   pip install -r requirements.txt
+   streamlit run app.py
 
-Cara testing:
-1. Buka terminal di folder dss_railway_supabase.
-2. Jalankan: pytest
+3. Jalankan testing:
+   pytest
 
-Jika Railway dan Supabase sudah pernah dibuat:
-1. Tidak perlu membuat Railway project baru.
-2. Tidak perlu membuat Supabase project baru.
-3. Replace file project lama dengan isi zip ini.
-4. Commit dan push ke GitHub yang sudah tersambung ke Railway.
-5. Railway akan redeploy otomatis.
-6. Environment variable lama tetap dipakai:
-   - SUPABASE_URL
-   - SUPABASE_ANON_KEY
-7. File supabase/schema.sql hanya perlu dijalankan ulang jika tabel dss_history belum pernah ada.
+4. Screenshot untuk laporan:
+   - Tabel hasil ranking
+   - Grafik ranking
+   - Grafik bobot
+   - Hasil terminal pytest (3 passed)
 
-Catatan penting:
-- Video demo 3-5 menit tetap perlu direkam manual karena tugas meminta screen recording aplikasi berjalan.
-- Saat video, tunjukkan input/upload CSV, ubah bobot what-if, hitung SAW/TOPSIS, grafik, dan download hasil CSV.
+5. Jika ingin deploy ulang ke Railway tanpa setting ulang:
+   git add .
+   git commit -m "uas apk rian"
+   git push
+
+6. Railway akan redeploy otomatis.
+
+7. Untuk mengganti nama project/service Railway secara permanen:
+   buka Railway Dashboard > pilih project > Settings > rename project/service menjadi "uas apk rian".
